@@ -15,15 +15,6 @@ uint8_t head_ptr;
 uint8_t tail_ptr;
 uint8_t is_full; //bandera que indica cuando el buffer está lleno
 
-uint8_t ring_buffer_size(void){
-	uint8_t size = 0;
-	if(head_ptr > tail_ptr){
-		size = head_ptr - tail_ptr;
-	}else{
-
-	}
-}
-
 void ring_buffer_write(uint8_t data){
 		ring_buffer[head_ptr] = data;
 		head_ptr = head_ptr + 1; //los espacios van a ir moviendose
@@ -63,4 +54,21 @@ void ring_buffer_reset(){
 	head_ptr = 0;
 	tail_ptr = 0;
 	is_full = 0;
+}
+
+uint8_t ring_buffer_size(void){
+	uint8_t size = 0;
+
+    if (is_full != 0) {
+    	size = capacity; //Si el buffer se encuentra lleno, devuelve esa misma capacidad como tamaño
+    }
+
+    if (head_ptr >= tail_ptr) {
+    	size = head_ptr - tail_ptr;	 //Si la cabeza es mayor o igual a la cola, el tamaño es la diferencia entre ambos,
+        							 //ya que no se ha dado la vuelta al buffer
+    } else {
+    	size = capacity + (head_ptr - tail_ptr); //Si la cabeza ha dado la vuelta y alcanza la cola, el tamaño será la
+        										 //capacidad del buffer más la diferencia entre cabeza y cola
+    }
+    return size;
 }

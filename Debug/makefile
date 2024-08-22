@@ -60,8 +60,8 @@ all: main-build
 main-build: mid_term_review.elf secondary-outputs
 
 # Tool invocations
-mid_term_review.elf mid_term_review.map: $(OBJS) $(USER_OBJS) D:\Prog\STM32CubeIDE_1.14.1\STM32CubeIDE\mid_term_review\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "mid_term_review.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Prog\STM32CubeIDE_1.14.1\STM32CubeIDE\mid_term_review\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mid_term_review.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+mid_term_review.elf mid_term_review.map: $(OBJS) $(USER_OBJS) D:\Prog\STM32CubeIDE_1.14.1\STM32CubeIDE\mid_term_review\ring_buffer\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "mid_term_review.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Prog\STM32CubeIDE_1.14.1\STM32CubeIDE\mid_term_review\ring_buffer\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mid_term_review.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

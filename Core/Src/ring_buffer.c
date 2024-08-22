@@ -23,6 +23,7 @@ uint8_t ring_buffer_size(void){
 
 	}
 }
+
 void ring_buffer_write(uint8_t data){
 		ring_buffer[head_ptr] = data;
 		head_ptr = head_ptr + 1; //los espacios van a ir moviendose
@@ -55,4 +56,11 @@ uint8_t ring_buffer_read(uint8_t * data){
 		return 1; //buffer con datos
 	}
 	return 0; //buffer vacío
+}
+
+void ring_buffer_reset(){
+	//Queremos que el valor de la cabeza, cola y que la bandera de llenado queden en 0
+	head_ptr = 0;
+	tail_ptr = 0;
+	is_full = 0;
 }

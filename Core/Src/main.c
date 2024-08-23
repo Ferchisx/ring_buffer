@@ -112,11 +112,16 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_UART_Receive_IT(&huart2, &data, 1);
+  uint32_t ced = 1056120378;
+  char name[] = "Felipe Fernandez";
   while (1)
   {
 	  uint8_t byte = 0;
 	  if(ring_buffer_read(&byte)!=0){
 		  HAL_UART_Transmit(&huart2,&byte,1	,10);
+	  }
+	  if(data == ced){
+		  HAL_UART_Transmit(&huart2,&name,strlen(name),10);
 	  }
     /* USER CODE END WHILE */
 

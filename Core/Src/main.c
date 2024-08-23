@@ -43,9 +43,11 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-uint8_t left_pressed = 0;
-uint8_t right_pressed = 0;
 uint8_t data;
+#define CED "1056120378"
+#define NAME "Felipe Fernandez"
+char id[sizeof(CED)]={0};
+uint8_t id_index=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,17 +73,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){ //librería para la int
 	//poner codigo aqui para que no se borre
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	}
-
-#define CED 1056120378
-const char name[] = "Felipe Fernandez";
-void process_ID(){
-	uint32_t received_ID;
-	if (HAL_UART_Receive_IT(&huart2, (uint8_t*)&received_ID, 4) == HAL_OK) {
-		if (received_ID == CED) {
-			HAL_UART_Transmit(&huart2, (uint8_t*)name, strlen(name), 10);
-		}
-	}
-}
 /* USER CODE END 0 */
 
 /**
@@ -123,11 +114,15 @@ int main(void)
   HAL_UART_Receive_IT(&huart2, &data, 1);
   while (1)
   {
-	  process_ID();
-//	  uint8_t byte = 0;
-//	  if(ring_buffer_read(&byte)!=0){
-//		  HAL_UART_Transmit(&huart2,&byte,1	,10);
-//	  }
+	  uint8_t byte=0;
+	  	  if(ring_buffer_read(&byte) != 0){
+	  		  id[id_index++] = byte;
+	  		  if(id_index==strlen(CED)){
+	  		      HAL_UART_Transmit(&huart2, (uint8_t*)NAME, strlen(NAME), 100);
+	  		      HAL_UART_Transmit(&huart2, (uint8_t*)"\r\n", 2, 100);
+	  		      id_index=0;  //reset
+	  		  }
+	  	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

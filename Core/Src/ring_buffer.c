@@ -9,7 +9,7 @@
 #include "ring_buffer.h"
 
 //para crear la memoria en buffer
-#define capacity (8)
+#define capacity (10)
 uint8_t ring_buffer[capacity];
 uint8_t head_ptr;
 uint8_t tail_ptr;
@@ -36,7 +36,7 @@ void ring_buffer_write(uint8_t data){
 		}
 }
 
-uint8_t ring_buffer_read(uint8_t * data){
+uint8_t ring_buffer_read(uint8_t *data){
 	if((is_full != 0) || (head_ptr != tail_ptr)){
 		*data = ring_buffer[tail_ptr];
 		tail_ptr = tail_ptr + 1;

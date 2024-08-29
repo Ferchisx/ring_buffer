@@ -53,6 +53,14 @@ uint8_t data;
 #define NAME "Felipe Fernandez"
 char id[sizeof(CED)]={0};
 uint8_t id_index=0;
+
+#define CAPACITY_USART1 10
+uint8_t mem_usart1[CAPACITY_USART1];
+ring_buffer_t rb_usart1;
+
+#define CAPACITY_USART2 10
+uint8_t mem_usart2[CAPACITY_USART2];
+ring_buffer_t rb_usart2;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -69,11 +77,11 @@ static void MX_I2C1_Init(void);
 /* USER CODE BEGIN 0 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(huart -> Instance == USART1){
-		ring_buffer_write(data);
+		ring_buffer_write(&rb_usart1,data);
 		HAL_UART_Receive_IT(&huart1, &data, 1);
 	}
 	if(huart -> Instance == USART2){
-		ring_buffer_write(data);
+		ring_buffer_write(&rb_usart2,data);
 		HAL_UART_Receive_IT(&huart2, &data, 1);
 
 	}
@@ -121,15 +129,19 @@ int main(void)
   ssd1306_SetCursor(10,20);
   ssd1306_WriteString("Hola mundo", Font_6x8, Black);
   ssd1306_UpdateScreen();
+
+  ring_buffer_init(&rb_usart1, mem_usart1, CAPACITY_USART1);
+  ring_buffer_init(&rb_usart2, mem_usart2, CAPACITY_USART2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_UART_Receive_IT(&huart1, &data, 1);
   HAL_UART_Receive_IT(&huart2, &data, 1);
   while (1)
   {
 	  uint8_t byte=0;
-	  	  if(ring_buffer_read(&byte) != 0){
+	  	  if(ring_buffer_read(&rb_usart2,&byte) != 0){
 	  		  id[id_index++] = byte;
 	  		  if(id_index==strlen(CED)){
 	  		      HAL_UART_Transmit(&huart2, (uint8_t*)NAME, strlen(NAME), 100);

@@ -52,6 +52,8 @@ uint8_t data;
 #define CED "1056120378"
 #define NAME "Felipe Fernandez"
 char id[sizeof(CED)]={0};
+char name[sizeof(NAME)]={0};
+uint8_t name_index=0;
 uint8_t id_index=0;
 
 #define CAPACITY_USART1 10
@@ -146,9 +148,17 @@ int main(void)
 	  		  if(id_index==strlen(CED)){
 	  		      HAL_UART_Transmit(&huart2, (uint8_t*)NAME, strlen(NAME), 100);
 	  		      HAL_UART_Transmit(&huart2, (uint8_t*)"\r\n", 2, 100);
-	  		      ssd1306_WriteString("Felipe Fernandez",Font_6x8,Black);
-	  		      ssd1306_UpdateScreen();
+//	  		      ssd1306_WriteString("Felipe Fernandez",Font_6x8,Black);
+//	  		      ssd1306_UpdateScreen();
 	  		      id_index=0;  //reset
+	  		  }
+	  	  }
+	  	  if(ring_buffer_read(&rb_usart1,&byte)!=0){
+	  		  name[name_index++]=byte;
+	  		  if(name_index==strlen(NAME)){
+	  			  HAL_UART_Transmit(&huart1,(uint8_t*)CED,strlen(CED),100);
+	  			  HAL_UART_Transmit(&huart1,(uint8_t*)"\r\n",2,100);
+	  			  name_index=0;
 	  		  }
 	  	  }
     /* USER CODE END WHILE */

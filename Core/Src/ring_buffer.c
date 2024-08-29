@@ -74,9 +74,9 @@ uint8_t ring_buffer_size(void){
 }
 
 uint8_t ring_buffer_is_full(void){
-	return ((head_ptr + 1) % capacity) == tail_ptr;
+	return is_full;
 }
 
 uint8_t ring_buffer_is_empty(void){
-	return (head_ptr == tail_ptr) && (is_full == 0);
+	return ((head_ptr == tail_ptr) && (is_full == 0)) ?1:0;
 }
